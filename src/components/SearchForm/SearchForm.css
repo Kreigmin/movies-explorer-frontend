@@ -1,0 +1,127 @@
+.form {
+  width: 100%;
+  padding: 80px 0 40px;
+  border-bottom: 1px solid #424242;
+}
+
+.form__fieldset {
+  display: flex;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+
+.form__fieldset:last-of-type {
+  margin-top: 31px;
+}
+
+.form__input {
+  max-width: 1060px;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  background-color: #2f2f2f;
+  padding: 0;
+  margin-right: 10px;
+  color: #fff;
+  padding: 15px 0 15px 22px;
+}
+
+.form__input::placeholder {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.29;
+  color: #8b8b8b;
+}
+
+.form__input:focus {
+  outline: 1px solid #8b8b8b;
+}
+
+.form__submit-btn {
+  padding: 13px 17px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  color: #fff;
+  background-color: #4285f4;
+  border: none;
+  border-radius: 3px;
+  opacity: 1;
+  transition: opacity 0.3s;
+  cursor: pointer;
+}
+
+.form__submit-btn:hover {
+  opacity: 0.8;
+}
+
+.form__checkbox-label {
+  position: relative;
+  width: 36px;
+  height: 20px;
+}
+
+.form__checkbox {
+  appearance: none;
+  width: 36px;
+  height: 20px;
+  position: absolute;
+  left: 0;
+  border: none;
+  outline: 1px solid #404040;
+  border-radius: 16px;
+  background-color: #202020;
+  transition: 0.3s;
+  box-shadow: 0 4px 4px rgba(50, 50, 71, 0.08), 0 4px 8px rgba(50, 50, 71, 0.06);
+  cursor: pointer;
+}
+
+.form__checkbox::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-color: #a0a0a0;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: 0.3s ease;
+}
+
+.form__checkbox:checked::before {
+  transform: translateX(17px);
+  background-color: #2be080;
+}
+
+.form__checkbox-name {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #fff;
+  margin: 0 0 0 12px;
+}
+
+@media (max-width: 320px) {
+  .form {
+    padding-bottom: 43px;
+  }
+  .form__fieldset:last-of-type {
+    margin-top: 45px;
+  }
+  .form__checkbox-name {
+    font-size: 11px;
+    line-height: 1.64;
+    margin-left: 13px;
+  }
+  .form__input {
+    padding: 13px 0 13px 16px;
+  }
+  .form__input::placeholder {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}

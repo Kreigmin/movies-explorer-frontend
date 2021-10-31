@@ -37,14 +37,6 @@
   opacity: 0.8;
 }
 
-.preloader {
-  background-image: url(../../images/preloader.svg);
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
-  display: none;
-}
-
 @media (max-width: 1090px) {
   .cards__list {
     grid-template-columns: repeat(2, min-content);

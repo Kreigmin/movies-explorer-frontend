@@ -1,36 +1,36 @@
 import React from "react";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
-import womanAndChildren from "../../images/woman-and-children.jpg";
-import oldFormatPhoto from "../../images/old-format-photo.jpg";
-import manWithGuitar from "../../images/man-with-guitar.jpg";
 
-function SavedMovies() {
-  const cards = [
-    {
-      id: 1,
-      nameRU: "33 слова о дизайне",
-      duration: "1ч 47м",
-      image: womanAndChildren,
-    },
-    {
-      id: 2,
-      nameRU: "33 слова о дизайне",
-      duration: "1ч 47м",
-      image: oldFormatPhoto,
-    },
-    {
-      id: 3,
-      nameRU: "33 слова о дизайне",
-      duration: "1ч 47м",
-      image: manWithGuitar,
-    },
-  ];
-
+function SavedMovies({
+  savedMovies,
+  onDeleteMovie,
+  setSavedMoviesSearchText,
+  onRenderLoading,
+  onChecked,
+  onSavedMoviesSearchFormSubmit,
+  onCheckedSavedMovies,
+  isCheckedSavedMovies,
+  isThereSortedSavedMovies,
+  isSubmitting,
+}) {
   return (
     <main className="main">
-      <SearchForm />
-      <MoviesCardList cards={cards} />
+      <SearchForm
+        setSavedMoviesSearchText={setSavedMoviesSearchText}
+        onRenderLoading={onRenderLoading}
+        onChecked={onChecked}
+        onSavedMoviesSearchFormSubmit={onSavedMoviesSearchFormSubmit}
+        onCheckedSavedMovies={onCheckedSavedMovies}
+        isCheckedSavedMovies={isCheckedSavedMovies}
+      />
+      <MoviesCardList
+        movies={savedMovies}
+        onDeleteMovie={onDeleteMovie}
+        savedMovies={savedMovies}
+        isThereSortedSavedMovies={isThereSortedSavedMovies}
+        isSubmitting={isSubmitting}
+      />
     </main>
   );
 }

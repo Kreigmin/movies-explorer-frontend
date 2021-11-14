@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import { Link, Route, Switch } from "react-router-dom";
+import { Link, Route, Switch, useLocation } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
 
 function Header() {
   const [isClicked, setIsClicked] = useState(false);
+  let location = useLocation();
 
   function handleBurgerBtnClick() {
     setIsClicked(true);
+  }
+
+  function reloadPage() {
+    window.location.reload(false);
   }
 
   function closePopup() {
@@ -33,7 +38,11 @@ function Header() {
       <Route path={["/movies", "/saved-movies", "/profile"]}>
         <header className="header header_bg-color_black">
           <div className="header__container">
-            <Link to="/" className="header__logo"></Link>
+            <Link
+              to={location.pathname}
+              className="header__logo"
+              onClick={reloadPage}
+            ></Link>
             <button
               className="header__burger-menu-btn"
               type="button"

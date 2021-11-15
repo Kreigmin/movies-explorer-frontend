@@ -1,4 +1,6 @@
 import React from "react";
+import Footer from "../Footer/Footer";
+import Header from "../Header/Header";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
 
@@ -15,27 +17,32 @@ function Movies({
   onHandleBookmark,
   savedMovies,
   isThereSortetMovies,
+  loggedIn,
 }) {
   return (
-    <main className="main">
-      <SearchForm
-        onSearchFormSubmit={onSearchFormSubmit}
-        onChecked={onChecked}
-        onSearchText={onSearchText}
-        onRenderLoading={onRenderLoading}
-        isChecked={isChecked}
-      />
-      <MoviesCardList
-        movies={movies}
-        visible={visible}
-        loadMore={loadMore}
-        isSubmitting={isSubmitting}
-        onHandleBookmark={onHandleBookmark}
-        savedMovies={savedMovies}
-        sortedMovies={movies}
-        isThereSortetMovies={isThereSortetMovies}
-      />
-    </main>
+    <>
+      <Header loggedIn={loggedIn} />
+      <main className="main">
+        <SearchForm
+          onSearchFormSubmit={onSearchFormSubmit}
+          onChecked={onChecked}
+          onSearchText={onSearchText}
+          onRenderLoading={onRenderLoading}
+          isChecked={isChecked}
+        />
+        <MoviesCardList
+          movies={movies}
+          visible={visible}
+          loadMore={loadMore}
+          isSubmitting={isSubmitting}
+          onHandleBookmark={onHandleBookmark}
+          savedMovies={savedMovies}
+          sortedMovies={movies}
+          isThereSortetMovies={isThereSortetMovies}
+        />
+      </main>
+      <Footer />
+    </>
   );
 }
 

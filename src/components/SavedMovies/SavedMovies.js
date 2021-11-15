@@ -1,4 +1,6 @@
 import React from "react";
+import Footer from "../Footer/Footer";
+import Header from "../Header/Header";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
 
@@ -13,25 +15,30 @@ function SavedMovies({
   isCheckedSavedMovies,
   isThereSortedSavedMovies,
   isSubmitting,
+  loggedIn,
 }) {
   return (
-    <main className="main">
-      <SearchForm
-        setSavedMoviesSearchText={setSavedMoviesSearchText}
-        onRenderLoading={onRenderLoading}
-        onChecked={onChecked}
-        onSavedMoviesSearchFormSubmit={onSavedMoviesSearchFormSubmit}
-        onCheckedSavedMovies={onCheckedSavedMovies}
-        isCheckedSavedMovies={isCheckedSavedMovies}
-      />
-      <MoviesCardList
-        movies={savedMovies}
-        onDeleteMovie={onDeleteMovie}
-        savedMovies={savedMovies}
-        isThereSortedSavedMovies={isThereSortedSavedMovies}
-        isSubmitting={isSubmitting}
-      />
-    </main>
+    <>
+      <Header loggedIn={loggedIn} />
+      <main className="main">
+        <SearchForm
+          setSavedMoviesSearchText={setSavedMoviesSearchText}
+          onRenderLoading={onRenderLoading}
+          onChecked={onChecked}
+          onSavedMoviesSearchFormSubmit={onSavedMoviesSearchFormSubmit}
+          onCheckedSavedMovies={onCheckedSavedMovies}
+          isCheckedSavedMovies={isCheckedSavedMovies}
+        />
+        <MoviesCardList
+          movies={savedMovies}
+          onDeleteMovie={onDeleteMovie}
+          savedMovies={savedMovies}
+          isThereSortedSavedMovies={isThereSortedSavedMovies}
+          isSubmitting={isSubmitting}
+        />
+      </main>
+      <Footer />
+    </>
   );
 }
 

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route, useHistory, useLocation } from "react-router-dom";
 import "./App.css";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
@@ -17,6 +15,13 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import movieApi from "../../utils/MoviesApi";
 import useWindowSize from "../../utils/useWindowSize";
 import { filterCheckedMovies, filterMovies } from "../../utils/movieFilter";
+import {
+  LARGE_WIDTH_MOVIES_DISPLAY,
+  MEDIUM_WIDTH_MOVIES_DISPLAY,
+  SMALL_WIDTH_MOVIES_DISPLAY,
+  CONFLICT_ERROR_STATUS_CODE,
+  UNAUTHORIZED_ERROR_STATUS_CODE,
+} from "../../utils/constants";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -39,36 +44,42 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [width, height] = useWindowSize();
 
-  let history = useHistory();
-  let location = useLocation();
+  const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
-    getContent()
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
-      .then((res) => {
-        if (res) {
-          setLoggedIn(true);
-          setIsThereSortedMovies(true);
-          if (
-            location.pathname === "/signin" ||
-            location.pathname === "/signup" ||
-            location.pathname === "/"
-          ) {
-            history.push("/movies");
-          } else {
-            history.push(location.pathname);
+    if (
+      location.pathname === "/" ||
+      location.pathname === "/movies" ||
+      location.pathname === "/saved-movies" ||
+      location.pathname === "/profile"
+    ) {
+      getContent()
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
           }
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [history]);
+          return Promise.reject(`Ошибка: ${res.status}`);
+        })
+        .then((res) => {
+          if (res) {
+            setLoggedIn(true);
+            setIsThereSortedMovies(true);
+            if (
+              location.pathname === "/signin" ||
+              location.pathname === "/signup"
+            ) {
+              history.push("/movies");
+            } else {
+              history.push(location.pathname);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
 
   useEffect(() => {
     if (loggedIn) {
@@ -106,7 +117,7 @@ function App() {
           });
       })
       .catch((err) => {
-        if (err.status === 409) {
+        if (err.status === CONFLICT_ERROR_STATUS_CODE) {
           setErrorStatus(true);
           setErrorInfoText("Пользователь с таким email уже существует.");
         } else {
@@ -126,7 +137,7 @@ function App() {
         setMovies([]);
       })
       .catch((err) => {
-        if (err.status === 401) {
+        if (err.status === UNAUTHORIZED_ERROR_STATUS_CODE) {
           setErrorStatus(true);
           setErrorInfoText("Вы ввели неправильный логин или пароль.");
         }
@@ -142,7 +153,7 @@ function App() {
         setSuccessStatus(true);
       })
       .catch((err) => {
-        if (err.status === 409) {
+        if (err.status === CONFLICT_ERROR_STATUS_CODE) {
           setErrorStatus(true);
           setErrorInfoText("Пользователь с таким email уже существует.");
         } else {
@@ -276,11 +287,11 @@ function App() {
 
   useEffect(() => {
     if (width > 768) {
-      return setVisible(12);
+      return setVisible(LARGE_WIDTH_MOVIES_DISPLAY);
     } else if (width <= 768 && width > 321) {
-      return setVisible(8);
+      return setVisible(MEDIUM_WIDTH_MOVIES_DISPLAY);
     } else if (width <= 320) {
-      return setVisible(5);
+      return setVisible(SMALL_WIDTH_MOVIES_DISPLAY);
     }
   }, [width]);
 
@@ -333,7 +344,6 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
         <Switch>
           <Route path="/signin">
             <Login
@@ -366,6 +376,7 @@ function App() {
               savedMovies={savedMovies}
               onHandleBookmark={handleBookmarkMovieStatus}
               isThereSortetMovies={isThereSortetMovies}
+              loggedIn={loggedIn}
             />
           </ProtectedRoute>
           <ProtectedRoute path="/saved-movies" loggedIn={loggedIn}>
@@ -379,6 +390,7 @@ function App() {
               isCheckedSavedMovies={isCheckedSavedMovies}
               isThereSortedSavedMovies={isThereSortedSavedMovies}
               isSubmitting={isSubmitting}
+              loggedIn={loggedIn}
             />
           </ProtectedRoute>
           <ProtectedRoute path="/profile" loggedIn={loggedIn}>
@@ -389,16 +401,16 @@ function App() {
               errorInfoText={errorInfoText}
               successStatus={successStatus}
               setSuccessStatus={setSuccessStatus}
+              loggedIn={loggedIn}
             />
           </ProtectedRoute>
           <Route exact path="/">
-            <Main />
+            <Main loggedIn={loggedIn} />
           </Route>
-          <Route path="">
+          <Route path="*">
             <NotFoundPage />
           </Route>
         </Switch>
-        <Footer />
       </div>
     </CurrentUserContext.Provider>
   );

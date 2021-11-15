@@ -268,14 +268,8 @@ function App() {
 
   useEffect(() => {
     if (location.pathname === "/saved-movies") {
-      mainApi
-        .getSavedMovies()
-        .then((data) => {
-          setSavedMovies(data.movies);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      setSortedSavedMovies(savedMovies);
+      setIsCheckedSavedMovies(false);
     }
     setSavedMoviesSearchText("");
   }, [location.pathname]);
@@ -334,7 +328,7 @@ function App() {
         setIsThereSortedSavedMovies(false);
       }
     }
-  }, [isCheckedSavedMovies, savedMovies]);
+  }, [isCheckedSavedMovies, savedMovies, savedMoviesSearchText]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

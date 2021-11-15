@@ -36,12 +36,10 @@ function SearchForm({
 
   function handleSavedMoviesFilterSubmit(evt) {
     evt.preventDefault();
-    onRenderLoading(true);
     if (!text) {
       return setErrorClassName(errorClassName + " form__input-error_active");
     } else {
       setSavedMoviesSearchText(text);
-      onSavedMoviesSearchFormSubmit();
       return setErrorClassName("form__input-error text-input-error");
     }
   }

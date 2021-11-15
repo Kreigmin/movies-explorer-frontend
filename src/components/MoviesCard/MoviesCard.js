@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Switch, Route } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function MoviesCard({ movie, onDeleteMovie, onHandleBookmark, savedMovies }) {
   const [isLiked, setIsLiked] = useState(false);
+  const location = useLocation();
 
   const isBookmark = savedMovies.some((i) => i.nameRU === movie.nameRU);
 
@@ -33,8 +34,8 @@ function MoviesCard({ movie, onDeleteMovie, onHandleBookmark, savedMovies }) {
 
   return (
     <li className="movies-card">
-      <Switch>
-        <Route exact path="/movies">
+      {location.pathname === "/movies" ? (
+        <>
           <div className="movies-card__top">
             <div className="movies-card__description">
               <h2 className="movies-card__title">{movie.nameRU}</h2>
@@ -60,8 +61,9 @@ function MoviesCard({ movie, onDeleteMovie, onHandleBookmark, savedMovies }) {
               alt={movie.nameRU}
             />
           </a>
-        </Route>
-        <Route path="/saved-movies">
+        </>
+      ) : (
+        <>
           <div className="movies-card__top">
             <div className="movies-card__description">
               <h2 className="movies-card__title">{movie.nameRU}</h2>
@@ -88,8 +90,8 @@ function MoviesCard({ movie, onDeleteMovie, onHandleBookmark, savedMovies }) {
               alt={movie.nameRU}
             />
           </a>
-        </Route>
-      </Switch>
+        </>
+      )}
     </li>
   );
 }

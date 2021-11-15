@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Switch, Route } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Form({
   onLogin,
@@ -11,6 +11,8 @@ function Form({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const location = useLocation();
+
   const [nameValidation, setNameValidation] = useState({
     nameValidationMessage: "",
     isNameValid: false,
@@ -70,8 +72,8 @@ function Form({
     <section className="account-form">
       <div className="account-form__container">
         <Link to="/" className="account-form__logo"></Link>
-        <Switch>
-          <Route exact path="/signin">
+        {location.pathname === "/signin" ? (
+          <>
             <h2 className="account-form__title">Рады видеть!</h2>
             <form
               className="account-form"
@@ -159,8 +161,9 @@ function Form({
                 </p>
               </div>
             </form>
-          </Route>
-          <Route path="/signup">
+          </>
+        ) : (
+          <>
             <h2 className="account-form__title">Добро пожаловать!</h2>
             <form
               className="account-form"
@@ -275,8 +278,8 @@ function Form({
                 </p>
               </div>
             </form>
-          </Route>
-        </Switch>
+          </>
+        )}
       </div>
     </section>
   );

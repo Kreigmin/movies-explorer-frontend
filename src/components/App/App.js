@@ -64,7 +64,6 @@ function App() {
         .then((res) => {
           if (res) {
             setLoggedIn(true);
-            setIsThereSortedMovies(true);
             if (
               location.pathname === "/signin" ||
               location.pathname === "/signup"
@@ -89,6 +88,7 @@ function App() {
           setCurrentUser(userInfo);
           setSavedMovies(savedMovies.movies);
           setIsThereSortedMovies(true);
+          setIsThereSortedSavedMovies(true);
         })
         .catch((err) => {
           console.log(err);

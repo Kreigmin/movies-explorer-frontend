@@ -1,8 +1,10 @@
+import { SHORT_FILM_DURATION } from "./constants";
+
 export function filterCheckedMovies(movies, searchText) {
   const filteredMovies = movies.filter((movie) => {
     if (
       movie.nameRU.toLowerCase().includes(searchText.toLowerCase()) &&
-      movie.duration <= 40
+      movie.duration <= SHORT_FILM_DURATION
     ) {
       return true;
     } else {

@@ -43,6 +43,7 @@ class MainApi {
   getUserInfo() {
     return fetch(this._apiUrl + "/users/me", {
       credentials: "include",
+      cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
       },
@@ -62,6 +63,7 @@ class MainApi {
 
   getSavedMovies() {
     return fetch(this._apiUrl + "/movies", {
+      cache: "no-cache",
       credentials: "include",
     }).then(this._checkResponse);
   }

@@ -94,11 +94,16 @@ function App() {
     mainApi
       .signUp(name, email, password)
       .then(() => {
-        mainApi.signIn(email, password).then(() => {
-          setLoggedIn(true);
-          history.push("/movies");
-          setMovies([]);
-        });
+        mainApi
+          .signIn(email, password)
+          .then(() => {
+            setLoggedIn(true);
+            history.push("/movies");
+            setMovies([]);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         if (err.status === 409) {
@@ -148,10 +153,15 @@ function App() {
   }
 
   function handleSignOut() {
-    mainApi.signOut().then(() => {
-      setLoggedIn(false);
-      history.push("/");
-    });
+    mainApi
+      .signOut()
+      .then(() => {
+        setLoggedIn(false);
+        history.push("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function handleMoviesCheckboxBtnClick() {
@@ -205,28 +215,40 @@ function App() {
         nameEN,
         id,
       } = movie;
-      mainApi.createMovie({
-        country,
-        director,
-        duration,
-        year,
-        description,
-        image: `https://api.nomoreparties.co${image.url}`,
-        trailer: trailerLink,
-        thumbnail: `https://api.nomoreparties.co${image.formats.thumbnail.url}`,
-        nameRU,
-        nameEN,
-        movieId: id,
-      });
+      mainApi
+        .createMovie({
+          country,
+          director,
+          duration,
+          year,
+          description,
+          image: `https://api.nomoreparties.co${image.url}`,
+          trailer: trailerLink,
+          thumbnail: `https://api.nomoreparties.co${image.formats.thumbnail.url}`,
+          nameRU,
+          nameEN,
+          movieId: id,
+        })
+        .then((data) => {
+          setSavedMovies([data.movie, ...savedMovies]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       const currentSavedMovie = savedMovies.filter(
         (item) => item.nameRU === movie.nameRU
       );
-      mainApi.deleteMovie(currentSavedMovie[0]._id).then(() => {
-        setSavedMovies((state) =>
-          state.filter((k) => k._id !== currentSavedMovie[0]._id)
-        );
-      });
+      mainApi
+        .deleteMovie(currentSavedMovie[0]._id)
+        .then(() => {
+          setSavedMovies((state) =>
+            state.filter((k) => k._id !== currentSavedMovie[0]._id)
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }
 

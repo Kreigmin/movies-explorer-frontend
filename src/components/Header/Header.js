@@ -4,7 +4,7 @@ import Navigation from "../Navigation/Navigation";
 
 function Header({ loggedIn }) {
   const [isClicked, setIsClicked] = useState(false);
-  let location = useLocation();
+  const location = useLocation();
 
   const headerClassName = `header ${
     location.pathname === "/movies" ||

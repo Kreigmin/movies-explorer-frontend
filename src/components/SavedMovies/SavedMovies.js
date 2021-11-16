@@ -10,7 +10,6 @@ function SavedMovies({
   setSavedMoviesSearchText,
   onRenderLoading,
   onChecked,
-  onSavedMoviesSearchFormSubmit,
   onCheckedSavedMovies,
   isCheckedSavedMovies,
   isThereSortedSavedMovies,
@@ -25,7 +24,6 @@ function SavedMovies({
           setSavedMoviesSearchText={setSavedMoviesSearchText}
           onRenderLoading={onRenderLoading}
           onChecked={onChecked}
-          onSavedMoviesSearchFormSubmit={onSavedMoviesSearchFormSubmit}
           onCheckedSavedMovies={onCheckedSavedMovies}
           isCheckedSavedMovies={isCheckedSavedMovies}
         />

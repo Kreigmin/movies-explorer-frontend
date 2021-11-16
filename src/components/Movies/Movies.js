@@ -5,7 +5,6 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
 
 function Movies({
-  onSearchFormSubmit,
   movies,
   visible,
   loadMore,
@@ -24,7 +23,6 @@ function Movies({
       <Header loggedIn={loggedIn} />
       <main className="main">
         <SearchForm
-          onSearchFormSubmit={onSearchFormSubmit}
           onChecked={onChecked}
           onSearchText={onSearchText}
           onRenderLoading={onRenderLoading}

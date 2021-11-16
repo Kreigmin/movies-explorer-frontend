@@ -48,47 +48,45 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    if (
-      location.pathname === "/" ||
-      location.pathname === "/movies" ||
-      location.pathname === "/saved-movies" ||
-      location.pathname === "/profile"
-    ) {
-      getContent()
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
+    getContent()
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+      })
+      .then((res) => {
+        if (res) {
+          setLoggedIn(true);
+          if (
+            location.pathname === "/signin" ||
+            location.pathname === "/signup"
+          ) {
+            history.push("/movies");
+          } else {
+            history.push(location.pathname);
           }
-          return Promise.reject(`Ошибка: ${res.status}`);
-        })
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true);
-            if (
-              location.pathname === "/signin" ||
-              location.pathname === "/signup"
-            ) {
-              history.push("/movies");
-            } else {
-              history.push(location.pathname);
-            }
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, []);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [history]);
 
   useEffect(() => {
     if (loggedIn) {
-      Promise.all([mainApi.getUserInfo(), mainApi.getSavedMovies()])
+      Promise.all([
+        mainApi.getUserInfo(),
+        mainApi.getSavedMovies(),
+        movieApi.getAllMovies(),
+      ])
         .then((data) => {
-          const [userInfo, savedMovies] = data;
-          setCurrentUser(userInfo);
-          setSavedMovies(savedMovies.movies);
+          const [userInfo, savedMovies, allMovies] = data;
           setIsThereSortedMovies(true);
           setIsThereSortedSavedMovies(true);
+          setCurrentUser(userInfo);
+          setSavedMovies(savedMovies.movies);
+          setMovies(allMovies);
         })
         .catch((err) => {
           console.log(err);
@@ -178,37 +176,9 @@ function App() {
   function handleMoviesCheckboxBtnClick() {
     setIsChecked(!isChecked);
   }
+
   function handleSavedMoviesCheckboxBtnClick() {
     setIsCheckedSavedMovies(!isCheckedSavedMovies);
-  }
-
-  function handleSearchFormSubmit() {
-    movieApi
-      .getAllMovies()
-      .then((movies) => {
-        setMovies(movies);
-        localStorage.setItem("movies", JSON.stringify(movies));
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
-  }
-
-  function handleSavedMoviesSearchFormSubmit() {
-    mainApi
-      .getSavedMovies()
-      .then((data) => {
-        setSavedMovies(data.movies);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
   }
 
   function handleBookmarkMovieStatus(movie) {
@@ -313,7 +283,7 @@ function App() {
         setIsThereSortedMovies(false);
       }
     }
-  }, [isChecked, movies]);
+  }, [isChecked, searchText]);
 
   useEffect(() => {
     if (isCheckedSavedMovies) {
@@ -364,7 +334,6 @@ function App() {
 
           <ProtectedRoute path="/movies" loggedIn={loggedIn}>
             <Movies
-              onSearchFormSubmit={handleSearchFormSubmit}
               movies={sortedMovies}
               visible={visible}
               loadMore={hanleMoreBtnClick}
@@ -386,7 +355,6 @@ function App() {
               onCheckedSavedMovies={handleSavedMoviesCheckboxBtnClick}
               setSavedMoviesSearchText={setSavedMoviesSearchText}
               onRenderLoading={renderLoading}
-              onSavedMoviesSearchFormSubmit={handleSavedMoviesSearchFormSubmit}
               isCheckedSavedMovies={isCheckedSavedMovies}
               isThereSortedSavedMovies={isThereSortedSavedMovies}
               isSubmitting={isSubmitting}

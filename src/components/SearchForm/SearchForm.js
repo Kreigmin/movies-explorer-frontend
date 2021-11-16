@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 function SearchForm({
-  onSearchFormSubmit,
   onChecked,
   onSearchText,
   onRenderLoading,
@@ -22,34 +21,34 @@ function SearchForm({
     setText(evt.target.value);
   }
 
-  function handleSubmit(evt) {
-    evt.preventDefault();
-
+  function handleSubmit(searchTextFnc) {
     onRenderLoading(true);
     if (!text) {
       return setErrorClassName(errorClassName + " form__input-error_active");
     } else {
-      onSearchText(text);
-      onSearchFormSubmit();
+      searchTextFnc(text);
+      setTimeout(() => {
+        onRenderLoading(false);
+      }, 300);
       return setErrorClassName("form__input-error text-input-error");
     }
   }
 
+  function handleMoviesSubmit(evt) {
+    evt.preventDefault();
+    handleSubmit(onSearchText);
+  }
+
   function handleSavedMoviesFilterSubmit(evt) {
     evt.preventDefault();
-    if (!text) {
-      return setErrorClassName(errorClassName + " form__input-error_active");
-    } else {
-      setSavedMoviesSearchText(text);
-      return setErrorClassName("form__input-error text-input-error");
-    }
+    handleSubmit(setSavedMoviesSearchText);
   }
 
   return (
     <section className="search-form">
       <div className="container">
         {location.pathname === "/movies" ? (
-          <form className="form" onSubmit={handleSubmit}>
+          <form className="form" onSubmit={handleMoviesSubmit}>
             <fieldset className="form__fieldset">
               <input
                 className="form__input"

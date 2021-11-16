@@ -51,7 +51,9 @@ function MoviesCardList({
   }
 
   function renderSavedMovies() {
-    if (movies.length !== 0) {
+    if (isSubmitting) {
+      return <Preloader />;
+    } else if (movies.length !== 0) {
       return (
         <ul className="cards__list">
           {movies.map((movie) => (

@@ -1,23 +1,83 @@
 import React from "react";
 import MoviesCard from "../MoviesCard/MoviesCard";
-import { Route } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Preloader from "../Preloader/Preloader";
 
-function MoviesCardList({ cards }) {
+function MoviesCardList({
+  movies,
+  visible,
+  loadMore,
+  isSubmitting,
+  onDeleteMovie,
+  onHandleBookmark,
+  savedMovies,
+  isThereSortetMovies,
+  isThereSortedSavedMovies,
+}) {
+  const location = useLocation();
+  function renderMovies() {
+    if (isSubmitting) {
+      return <Preloader />;
+    } else if (movies.length !== 0) {
+      return (
+        <>
+          <ul className="cards__list">
+            {movies.slice(0, visible).map((movie) => (
+              <MoviesCard
+                key={movie.id}
+                movie={movie}
+                movies={movies}
+                onHandleBookmark={onHandleBookmark}
+                savedMovies={savedMovies}
+              />
+            ))}
+          </ul>
+          {visible < movies.length && (
+            <button
+              className="cards__more-btn"
+              type="button"
+              onClick={loadMore}
+            >
+              Ещё
+            </button>
+          )}
+        </>
+      );
+    } else if (isThereSortetMovies) {
+      return <></>;
+    } else {
+      return <p className="cards__nothing-found-text">Ничего не найдено</p>;
+    }
+  }
+
+  function renderSavedMovies() {
+    if (isSubmitting) {
+      return <Preloader />;
+    } else if (movies.length !== 0) {
+      return (
+        <ul className="cards__list">
+          {movies.map((movie) => (
+            <MoviesCard
+              key={movie.id}
+              id={movie.id}
+              movie={movie}
+              onDeleteMovie={onDeleteMovie}
+              savedMovies={savedMovies}
+            />
+          ))}
+        </ul>
+      );
+    } else if (isThereSortedSavedMovies) {
+      return <></>;
+    } else {
+      return <p className="cards__nothing-found-text">Ничего не найдено</p>;
+    }
+  }
+
   return (
     <section className="cards">
       <div className="container">
-        <Preloader />
-        <ul className="cards__list">
-          {cards.map((card) => (
-            <MoviesCard key={card.id} card={card} />
-          ))}
-        </ul>
-        <Route exact path="/movies">
-          <button className="cards__more-btn" type="button">
-            Ещё
-          </button>
-        </Route>
+        {location.pathname === "/movies" ? renderMovies() : renderSavedMovies()}
       </div>
     </section>
   );

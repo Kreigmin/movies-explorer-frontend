@@ -24,13 +24,17 @@
 
 .profile__form-field {
   border: none;
+  width: 100%;
+  border-bottom: 1px solid #424242;
+  padding: 0 0 16px;
+  margin: 0 0 17px;
+}
+
+.profile__input-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #424242;
-  padding: 0 0 16px;
-  margin: 0 0 17px;
 }
 
 .profile__form-field:last-of-type {
@@ -69,6 +73,13 @@
   justify-content: center;
 }
 
+.profile__success-request-text {
+  color: #00996b;
+  font-weight: 400;
+  font-size: 13px;
+  text-align: center;
+}
+
 .profile__edit-btn {
   max-width: 110px;
   width: 100%;
@@ -87,6 +98,12 @@
 
 .profile__edit-btn:hover {
   opacity: 0.7;
+}
+
+.profile__edit-btn:disabled {
+  opacity: 1;
+  cursor: default;
+  color: #c0c0c0;
 }
 
 .profile__exit-btn {

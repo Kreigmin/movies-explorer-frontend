@@ -16,6 +16,13 @@
   justify-content: center;
 }
 
+.cards__nothing-found-text {
+  color: #404040;
+  font-size: 50px;
+  text-align: center;
+  margin: 0;
+}
+
 .cards__more-btn {
   width: 100%;
   padding: 11px 0 9px;

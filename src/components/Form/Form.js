@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import { Link, Switch, Route } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-function Form() {
+function Form({
+  onLogin,
+  onRegister,
+  errorStatus,
+  errorInfoText,
+  setErrorStatus,
+}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const location = useLocation();
+
   const [nameValidation, setNameValidation] = useState({
     nameValidationMessage: "",
     isNameValid: false,
@@ -21,11 +29,11 @@ function Form() {
   function handleNameChange(evt) {
     setName(evt.target.value);
     const { validationMessage } = evt.target;
-    console.log(evt.target.validationMessage);
     setNameValidation({
       nameValidationMessage: validationMessage,
       isNameValid: evt.target.validity.valid,
     });
+    setErrorStatus(false);
   }
 
   function handleEmailChange(evt) {
@@ -35,6 +43,7 @@ function Form() {
       emailValidationMessage: validationMessage,
       isEmailValid: evt.target.validity.valid,
     });
+    setErrorStatus(false);
   }
 
   function handlePasswordChange(evt) {
@@ -44,16 +53,33 @@ function Form() {
       passwordValidationMessage: validationMessage,
       isPasswordValid: evt.target.validity.valid,
     });
+    setErrorStatus(false);
+  }
+
+  function handleRegisterFormSubmit(evt) {
+    onRegister(evt, name, email, password);
+  }
+
+  function handleLoginFormSubmit(evt) {
+    onLogin(evt, email, password);
+  }
+
+  function handleRouteChangeClick() {
+    setErrorStatus(false);
   }
 
   return (
     <section className="account-form">
       <div className="account-form__container">
         <Link to="/" className="account-form__logo"></Link>
-        <Switch>
-          <Route exact path="/signin">
+        {location.pathname === "/signin" ? (
+          <>
             <h2 className="account-form__title">Рады видеть!</h2>
-            <form className="account-form" name="login">
+            <form
+              className="account-form"
+              name="login"
+              onSubmit={handleLoginFormSubmit}
+            >
               <fieldset className="account-form__field">
                 <label className="account-form__input-label">email</label>
                 <input
@@ -103,6 +129,13 @@ function Form() {
                 </span>
               </fieldset>
               <div className="account-form__footer-login">
+                {errorStatus ? (
+                  <span className="account-form__server-error">
+                    {errorInfoText}
+                  </span>
+                ) : (
+                  <></>
+                )}
                 <button
                   className="account-form__submit-btn"
                   disabled={
@@ -117,17 +150,26 @@ function Form() {
                 <p className="account-form__caption">
                   Ещё не зарегистрированы?&nbsp;
                   <span>
-                    <Link className="account-form__caption-link" to="/signup">
+                    <Link
+                      className="account-form__caption-link"
+                      to="/signup"
+                      onClick={handleRouteChangeClick}
+                    >
                       Зарегистрироваться
                     </Link>
                   </span>
                 </p>
               </div>
             </form>
-          </Route>
-          <Route path="/signup">
+          </>
+        ) : (
+          <>
             <h2 className="account-form__title">Добро пожаловать!</h2>
-            <form className="account-form" name="register">
+            <form
+              className="account-form"
+              name="register"
+              onSubmit={handleRegisterFormSubmit}
+            >
               <fieldset className="account-form__field">
                 <label className="account-form__input-label">Имя</label>
                 <input
@@ -140,6 +182,7 @@ function Form() {
                   maxLength="30"
                   required={true}
                   noValidate
+                  autoComplete="off"
                   onChange={handleNameChange}
                 />
                 <span
@@ -201,6 +244,13 @@ function Form() {
                 </span>
               </fieldset>
               <div className="account-form__footer-register">
+                {errorStatus ? (
+                  <span className="account-form__server-error">
+                    {errorInfoText}
+                  </span>
+                ) : (
+                  <></>
+                )}
                 <button
                   type="submit"
                   className="account-form__submit-btn"
@@ -217,15 +267,19 @@ function Form() {
                 <p className="account-form__caption">
                   Уже зарегистрированы?&nbsp;
                   <span>
-                    <Link className="account-form__caption-link" to="/signin">
+                    <Link
+                      className="account-form__caption-link"
+                      to="/signin"
+                      onClick={handleRouteChangeClick}
+                    >
                       Войти
                     </Link>
                   </span>
                 </p>
               </div>
             </form>
-          </Route>
-        </Switch>
+          </>
+        )}
       </div>
     </section>
   );

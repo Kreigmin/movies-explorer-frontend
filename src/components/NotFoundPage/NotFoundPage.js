@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 
 function NotFoundPage() {
-  let history = useHistory();
+  const history = useHistory();
 
   return (
     <section className="not-found">
